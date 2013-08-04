@@ -151,7 +151,7 @@ $(function(){
 		document.title = 'The Bathrooms are '+status;
 		Grid.show(function(){
 			container.find('div').text(status).fadeIn(400);
-			if(status === 'occupied'){ Sound.fart(); }else{ Sound.run(); }
+			'occupied' === status ? Sound.fart() : Sound.run();
 		});
 	});
 
