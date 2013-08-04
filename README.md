@@ -5,9 +5,8 @@ Dramafever bathroom check
 
 
 Dependencies:
-    Node.js
-    npm
-    grunt
-    
-    - check package.json for grunt plugins
+   - Node.js
+   - npm
+   - grunt
+   - check package.json for grunt plugins
   
