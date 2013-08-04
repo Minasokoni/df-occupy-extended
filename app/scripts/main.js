@@ -1,11 +1,12 @@
 var Grid = Grid || ( function() {
 
+	'use strict';
+
 	var blockWidth = 150,
 	blockHeight    = 150,
 	win            = $(window),
 	winh,
 	winw,
-	rows,
 	blocksPerRow;
 
 	function build(){
@@ -20,9 +21,9 @@ var Grid = Grid || ( function() {
 
 
 		while (i < rows * blocksPerRow) {
-			blocks += '<li class=\"block-'+parseInt(Math.random() * 3)+'\"></li>';
+			blocks += '<li class=\"block-'+parseInt(Math.random() * 3, 10)+'\"></li>';
 			i++;
-		};
+		}
 
 		grid.html(blocks);
 
@@ -58,7 +59,7 @@ var Grid = Grid || ( function() {
 				$(block).animate({'opacity':1.0}, 250, function(){
 					count++;
 					//counter in here
-					if(numofblocks == count){
+					if(numofblocks === count){
 						if(callback){
 							callback();
 						}
@@ -89,13 +90,15 @@ var Grid = Grid || ( function() {
 		init: init,
 		show: show,
 		hide: hide
-	}
+	};
 
 
 } )();
 
 
 var Sound = Sound || ( function () {
+
+	'use strict';
 
 	var audio = $('<audio>', { autoplay : 'autoplay'});
 
@@ -113,42 +116,42 @@ var Sound = Sound || ( function () {
 
 	function addSource(element, path, type){
 		$('<source>').attr('src', path).appendTo(element);
-		$('<source>', {'src' : path, 'type': type})
+		$('<source>', {'src' : path, 'type': type});
 	}
 
 	return {
 		fart: fart,
 		run: boarding
-	}
+	};
 
 })();
 
 
 $(function(){
+
+	'use strict';
+
 	Grid.init();
 
-	// var refresh = setInterval(function(){
-	// 	$.get('http://dfoccupied.appspot.com/latest.json', function(data){
-	// 		var occupied = (data.occupied == true ? '#E81C30' : '#16C430');
-	// 		$('#container ul li').css({'background-color' : occupied});
-	// 		Grid.show(function(){
-	// 			Grid.hide();
-	// 		});
-	// 	});
-	// },(60000 * 2));
-
 	$.get('http://dfoccupied.appspot.com/latest.json', function(data){
-		var occupied = (data.occupied == true ? '#E81C30' : '#16C430');
-		var status = (data.occupied == true ? 'occupied' : 'vacant');
-		$('#container ul li').css({'background-color' : occupied});
+
+		var status = (data.occupied === true ? 'occupied' : 'vacant'),
+		container  = $('#container');
+
+		container.addClass(status);
+
+		$(window).resize(function(){
+			container.addClass(status);
+			container.find('div').fadeOut();
+			Grid.show(function(){
+				container.find('div').text(status).stop(true, true).fadeIn(400);
+			});
+		});
+
 		document.title = 'The Bathrooms are '+status;
 		Grid.show(function(){
-			$('#container div.text').text(status).addClass(status).fadeIn(400);
-			if(status == 'occupied'){
-				Sound.fart();
-			}else{
-				Sound.run();
-			}
+			container.find('div').text(status).fadeIn(400);
+			if(status === 'occupied'){ Sound.fart(); }else{ Sound.run(); }
 		});
 	});
 
